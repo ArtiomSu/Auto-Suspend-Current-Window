@@ -30,13 +30,6 @@ bool Suspender::resume_pid() {
 
 bool Suspender::toggle() {
     if (debug_started) {
-        /*
-        DWORD current_pid = pid;
-        get_active_window_pid();
-        if (current_pid != pid) {
-            //new window clicked, resume old window
-            DebugActiveProcessStop(current_pid);
-        }*/
         return resume_pid();
     }
     else {

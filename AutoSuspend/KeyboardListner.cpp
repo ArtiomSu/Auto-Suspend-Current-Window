@@ -3,6 +3,9 @@
 
 #include <iostream>
 
+//uncomment to not play sounds
+#define PlaySoundOnEvents
+
 DWORD KeyboardListner::sleep_duration = 500;
 int KeyboardListner::grace_period = 5;
 
@@ -11,18 +14,8 @@ void KeyboardListner::listen() {
 
     /*
     left ctrl = 17
-    p = 80
-    o = 79
-    a = 65
-    s = 83
     left shift = 160
-
-    w = 87
-    e = 69
-    k = 75
-    l = 76
-
-
+    letters follow ascii
     */
 
     int pattern_shift_p_o_a_s[] = { 160, 80, 79, 65, 83 };
@@ -44,30 +37,21 @@ void KeyboardListner::listen() {
             // lowest usable key 17 and highest is 162
         }
 
-        /*
-        bool success = true;
-        for (int i = 0; i < sizeof(pattern_shift_p_o_a_s) / sizeof(pattern_shift_p_o_a_s[0]); i++) {
-            if (keys[pattern_shift_p_o_a_s[i]] < 0) {
-                
-            }
-            else {
-                success = false;
-                break;
-            }
-        }
-        */
-
         if (check_pattern(keys, pattern_shift_p_o_a_s, sizeof(pattern_shift_p_o_a_s) / sizeof(pattern_shift_p_o_a_s[0]))) {
             std::cout << "key pattern matched lets goooo\n";
-            PlaySoundA((LPCSTR)"C:\\Windows\\Media\\Windows Notify.wav", NULL, SND_FILENAME | SND_ASYNC);
+            #ifdef PlaySoundOnEvents
+                PlaySoundA((LPCSTR)"C:\\Windows\\Media\\Windows Notify.wav", NULL, SND_FILENAME | SND_ASYNC);
+            #endif // PlaySoundOnEvents
             Suspender::toggle();
             counter = grace_period;
         }
 
         if (check_pattern(keys, pattern_shift_w_e_k_l, sizeof(pattern_shift_w_e_k_l) / sizeof(pattern_shift_w_e_k_l[0]))) {
             std::cout << "closing program\n";
-            PlaySoundA((LPCSTR)"C:\\Windows\\Media\\Speech Off.wav", NULL, SND_FILENAME | SND_ASYNC);
-            Sleep(1000); //so we can hear the sound
+            #ifdef PlaySoundOnEvents
+                PlaySoundA((LPCSTR)"C:\\Windows\\Media\\Speech Off.wav", NULL, SND_FILENAME | SND_ASYNC);
+                Sleep(1000); //so we can hear the sound
+            #endif // PlaySoundOnEvents
             break;
         }
 
